@@ -5,6 +5,13 @@ report.md
 report.json
 *.blast-radius.json
 
+# repo-radar / commit-surgeon / stack-to-repro generated output
+TOUR.md
+commit-plan.md
+commit.sh
+repro-brief.md
+*.tour.json
+
 # --- Python ---
 __pycache__/
 *.py[cod]
