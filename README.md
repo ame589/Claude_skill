@@ -1,4 +1,21 @@
+<div align="center">
+
 # 🧩 Dev Lifecycle Skills for Claude
+
+### *Four skills that kill the uncertainty tax on shipping software.*
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Dependencies: zero](https://img.shields.io/badge/dependencies-zero-brightgreen)](#design-principles)
+[![Skills: 4](https://img.shields.io/badge/skills-4-8A2BE2)](#-dev-lifecycle-skills-for-claude)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Agent%20Skills-D97757?logo=anthropic&logoColor=white)](https://code.claude.com/docs)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#license)
+
+🛰️ **Understand** &nbsp;·&nbsp; 🔪 **Build** &nbsp;·&nbsp; 🧭 **Ship** &nbsp;·&nbsp; 🎯 **Debug**
+
+</div>
+
+---
 
 A collection of [Claude Agent Skills](https://code.claude.com/docs) that attack
 the *uncertainty* tax on shipping software — the anxious questions between "done
@@ -7,6 +24,18 @@ coding" and "safely shipped" that no linter answers. Each skill pairs a
 available) with a **workflow** that tells Claude how to act on the output.
 
 Together they cover the full loop:
+
+```mermaid
+flowchart LR
+    A["🛰️ repo-radar<br/><em>Understand</em>"] --> B["🔪 commit-surgeon<br/><em>Build</em>"]
+    B --> C["🧭 blast-radius<br/><em>Ship</em>"]
+    C --> D["🎯 stack-to-repro<br/><em>Debug</em>"]
+    D --> A
+    style A fill:#1f6feb,color:#fff,stroke:none
+    style B fill:#8957e5,color:#fff,stroke:none
+    style C fill:#d29922,color:#fff,stroke:none
+    style D fill:#da3633,color:#fff,stroke:none
+```
 
 | Stage | Skill | The question it kills |
 | ----- | ----- | --------------------- |
@@ -136,3 +165,15 @@ assumptions and failure modes.
 ## License
 
 MIT — see [`LICENSE`](LICENSE). Contributions and new skills welcome.
+
+---
+
+<div align="center">
+
+**If these skills save you an afternoon, a ⭐ says thanks.**
+
+🛰️ · 🔪 · 🧭 · 🎯
+
+*Built with [Claude Code](https://claude.com/claude-code) — read-only engines, zero dependencies, honest heuristics.*
+
+</div>
