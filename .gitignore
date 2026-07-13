@@ -12,6 +12,10 @@ commit.sh
 repro-brief.md
 *.tour.json
 
+# session-handoff bundles (contain WIP + document copies — share deliberately)
+.handoff/
+handoff-*.tar.gz
+
 # --- Python ---
 __pycache__/
 *.py[cod]

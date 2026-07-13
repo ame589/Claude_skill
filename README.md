@@ -2,16 +2,16 @@
 
 # 🧩 Dev Lifecycle Skills for Claude
 
-### *Four skills that kill the uncertainty tax on shipping software.*
+### *Five skills that kill the uncertainty tax on shipping software.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![Dependencies: zero](https://img.shields.io/badge/dependencies-zero-brightgreen)](#design-principles)
-[![Skills: 4](https://img.shields.io/badge/skills-4-8A2BE2)](#-dev-lifecycle-skills-for-claude)
+[![Skills: 5](https://img.shields.io/badge/skills-5-8A2BE2)](#-dev-lifecycle-skills-for-claude)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Agent%20Skills-D97757?logo=anthropic&logoColor=white)](https://code.claude.com/docs)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#license)
 
-🛰️ **Understand** &nbsp;·&nbsp; 🔪 **Build** &nbsp;·&nbsp; 🧭 **Ship** &nbsp;·&nbsp; 🎯 **Debug**
+🛰️ **Understand** &nbsp;·&nbsp; 🔪 **Build** &nbsp;·&nbsp; 🧭 **Ship** &nbsp;·&nbsp; 🎯 **Debug** &nbsp;·&nbsp; 🤝 **Hand off**
 
 </div>
 
@@ -31,11 +31,20 @@ flowchart LR
     B --> C["🧭 blast-radius<br/><em>Ship</em>"]
     C --> D["🎯 stack-to-repro<br/><em>Debug</em>"]
     D --> A
+    E["🤝 session-handoff<br/><em>Hand off / Resume</em>"]
+    A -.-> E
+    B -.-> E
+    C -.-> E
+    D -.-> E
     style A fill:#1f6feb,color:#fff,stroke:none
     style B fill:#8957e5,color:#fff,stroke:none
     style C fill:#d29922,color:#fff,stroke:none
     style D fill:#da3633,color:#fff,stroke:none
+    style E fill:#238636,color:#fff,stroke:none
 ```
+
+_At any point in the loop, `session-handoff` can freeze the session — files **and**
+accumulated knowledge — so another developer resumes exactly there._
 
 | Stage | Skill | The question it kills |
 | ----- | ----- | --------------------- |
@@ -43,6 +52,7 @@ flowchart LR
 | 🔪 **Build** | [`commit-surgeon`](skills/commit-surgeon) | *"My working tree is a mess — how do I commit this cleanly?"* |
 | 🧭 **Ship** | [`blast-radius`](skills/blast-radius) | *"What does this change break? Did I forget tests/docs?"* |
 | 🎯 **Debug** | [`stack-to-repro`](skills/stack-to-repro) | *"Here's a crash — where is it and how do I reproduce it?"* |
+| 🤝 **Hand off** | [`session-handoff`](skills/session-handoff) | *"Another dev must resume my session — how do I not lose what we learned?"* |
 
 Each is language-agnostic (Python, JS/TS, Go, Java, Ruby, Rust, PHP, C/C++, C#,
 Kotlin, Swift) and never writes to your repo — the engines only read; Claude does
@@ -94,6 +104,24 @@ not the archaeology. Supports Python, JS/TS/Node, Java/Kotlin, Ruby, Go, PHP.
 python3 skills/stack-to-repro/scripts/parse_trace.py trace.txt --md repro-brief.md
 ```
 
+## 🤝 session-handoff — resumable session export
+
+A session's knowledge base is two things: the **mechanical state** (repo
+position, uncommitted work, the exact versions of every loaded document —
+captured and **content-hashed** by the engine) and the **semantic state**
+(decisions, findings, dead ends, next steps — which lives in the conversation
+and gets serialized into a rigorous `HANDOFF.md`). The bundle travels as a
+directory or a single `handoff-<ts>.tar.gz`; on the other side, `restore`
+verifies HEAD and hashes (detecting document drift), re-applies the work in
+progress, and hands the new session a ready-made resume prompt.
+
+```bash
+# sender
+python3 skills/session-handoff/scripts/handoff.py create --kb docs/ --pack
+# receiver
+python3 skills/session-handoff/scripts/handoff.py restore --bundle handoff-<ts>.tar.gz --apply
+```
+
 ---
 
 ## Layout
@@ -116,10 +144,13 @@ python3 skills/stack-to-repro/scripts/parse_trace.py trace.txt --md repro-brief.
     │   ├── scripts/blast_radius.py
     │   ├── references/methodology.md
     │   └── examples/example-report.md
-    └── stack-to-repro/
+    ├── stack-to-repro/
+    │   ├── SKILL.md
+    │   ├── scripts/parse_trace.py
+    │   └── references/trace-formats.md
+    └── session-handoff/
         ├── SKILL.md
-        ├── scripts/parse_trace.py
-        └── references/trace-formats.md
+        └── scripts/handoff.py       # create/restore verifiable handoff bundles
 ```
 
 Each skill is a self-contained directory: a `SKILL.md` (with YAML frontmatter
@@ -146,8 +177,10 @@ standalone (they're just Python scripts) and wire them into CI or git hooks.
 
 ## Design principles
 
-- **Read-only engines.** No skill mutates your repo. Analysis is separated from
-  action; Claude makes edits deliberately, with the analysis as evidence.
+- **Read-only engines.** Analysis never mutates your repo; Claude makes edits
+  deliberately, with the analysis as evidence. The only writes are explicit,
+  opt-in apply steps you invoke yourself (`commit.sh`, `handoff.py restore
+  --apply`).
 - **Zero dependencies.** Python 3 stdlib + `git`. `ripgrep` is used if present,
   with a pure-Python fallback. Nothing to install.
 - **Heuristic, honestly.** The engines are fast text/git heuristics, not
@@ -156,7 +189,7 @@ standalone (they're just Python scripts) and wire them into CI or git hooks.
 
 ## Limits
 
-All four engines are heuristic and text/git-based. They can miss dynamic
+All five engines are heuristic and text/git-based. They can miss dynamic
 dispatch, reflection, minified code, and cross-language boundaries, and can
 over-report common names. They're built to *focus attention*, not to gate merges
 or replace judgment. Each skill's `references/` documents its specific
@@ -172,7 +205,7 @@ MIT — see [`LICENSE`](LICENSE). Contributions and new skills welcome.
 
 **If these skills save you an afternoon, a ⭐ says thanks.**
 
-🛰️ · 🔪 · 🧭 · 🎯
+🛰️ · 🔪 · 🧭 · 🎯 · 🤝
 
 *Built with [Claude Code](https://claude.com/claude-code) — read-only engines, zero dependencies, honest heuristics.*
 
