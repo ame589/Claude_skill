@@ -43,13 +43,13 @@ what the user is shipping:
 
 ```bash
 # Uncommitted + staged work (default — "what am I about to commit")
-python3 blast-radius/scripts/blast_radius.py --md blast-radius-report.md
+python3 skills/blast-radius/scripts/blast_radius.py --md blast-radius-report.md
 
 # Everything on this branch vs the base (best for pre-PR / pre-merge)
-python3 blast-radius/scripts/blast_radius.py --base origin/main --md blast-radius-report.md
+python3 skills/blast-radius/scripts/blast_radius.py --base origin/main --md blast-radius-report.md
 
 # Only staged
-python3 blast-radius/scripts/blast_radius.py --staged
+python3 skills/blast-radius/scripts/blast_radius.py --staged
 ```
 
 The script needs only Python 3 and git; it uses `ripgrep` if present and falls
