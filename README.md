@@ -175,6 +175,20 @@ tour of this repo"*, *"split my changes into clean commits"*, *"what does this
 change break?"*, *"reproduce this stack trace"* — or you can run any engine
 standalone (they're just Python scripts) and wire them into CI or git hooks.
 
+## 🔌 Beyond Claude Code: Cline & other agents
+
+The engines are agent-agnostic — any tool that can run a terminal command can
+use them. Only the trigger/workflow layer is per-agent, and adapters live under
+[`integrations/`](integrations):
+
+- **[Cline](integrations/cline)** — drop-in workflows (`/handoff.md`,
+  `/resume-handoff.md`) for `.clinerules/workflows/`, mirroring the
+  `session-handoff` SKILL.md.
+
+The handoff **bundle format is the interop contract** (markdown + git patch +
+sha256 manifest in a tar.gz): a session exported from Claude Code can be resumed
+in Cline and vice versa.
+
 ## Design principles
 
 - **Read-only engines.** Analysis never mutates your repo; Claude makes edits
